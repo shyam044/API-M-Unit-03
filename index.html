@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API&M Unit-03</title>
+<style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+            font-size: 1rem;
+        }
+        header {
+            background-color: #0077cc;
+            color: white;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 1.2rem auto;
+            padding: 1rem;
+            background: white;
+            box-shadow: 0 0 8px rgba(0,0,0,0.06);
+        }
+        h2 {
+            color: #0077cc;
+            margin: 1.2rem 0 0.8rem;
+            font-size: 1.25rem;
+        }
+        ul {
+            margin: 0.4rem 0 0.7rem 0.7rem;
+            padding-left: 0.7rem;
+        }
+        ul ul {
+            margin-left: 0.7rem;
+            padding-left: 0.7rem;
+        }
+        li > ul {
+            margin-top: 0.2rem;
+            margin-bottom: 0.3rem;
+        }
+        strong { font-weight: 600; }
+        .code-label {
+            background: #e0e0e0;
+            padding: 4px 10px;
+            display: inline-block;
+            font-weight: bold;
+            color: #000;
+            border-radius: 6px 6px 0 0;
+            margin-left: 1rem;
+            font-size: 0.95rem;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 0 6px 6px 6px;
+            overflow-x: auto;
+            margin: -6px 0 0.6rem 1rem;
+            font-size: 0.95rem;
+            border: 1px solid #ddd;
+        }
+        .output {
+            margin: 0 0 0 1.2rem;
+            padding: 0.45rem 0.8rem;
+            font-size: 1rem;
+            background: #f8f8fa;
+            border-radius: 4px;
+            border-left: 3px solid #50aaff;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0.7rem; }
+            h2 { font-size: 1.13rem; margin-top: 1rem;}
+            .code-label, pre { margin-left: 0.5rem; font-size: 0.87rem; }
+            .output { margin-left: 0.6rem; font-size: 0.96rem; padding: 0.36rem 0.6rem;}
+        }
+        @media (max-width: 480px) {
+            ul, ul ul { margin-left: 0.46rem !important; padding-left: 0.5rem !important;}
+        }
+        img {
+            display: block;
+            max-width: 58%;
+            height: auto;
+            max-height: 270px;
+            object-fit: contain;
+            margin: 1rem auto;
+            border-radius: 6px;
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+            border: 1px solid #ddd;
+        }
+        img:hover {
+            transform: scale(1.04);
+        }
+        #lightbox {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+        }
+        #lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        #lightbox img {
+            max-width: 88%;
+            max-height: 88%;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(255,255,255,0.3);
+            transform: scale(0.85);
+            transition: transform 0.3s ease;
+            cursor: zoom-out;
+        }
+        #lightbox.active img {
+            transform: scale(1);
+        }
+        #image-tip {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 119, 204, 0.96);
+            color: #fff;
+            padding: 0.7rem 1.1rem;
+            border-radius: 6px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+            white-space: nowrap;
+        }
+        #image-tip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        @media (max-width: 480px) {
+            #image-tip {
+                font-size: 0.85rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header><strong>This common code that covers entire topic in Unit-03</strong></header>
+
+<div class="container">
+  <div class="code-label">Entity.java</div>
+  <pre>@Entity
+@Table(name = "Table")
+public class Entity 
+{
+  @Id
+  @GeneratedValue
+  public int salary;
+}</pre>
+
+  <div class="code-label">Repository.java</div>
+  <pre>public interface Repository extends JpaRepository 
+{
+  @Modifying
+  @Transactional
+  @Query(value="Select * from Table", nativeQuery = true)  
+}</pre>
+
+  <div class="code-label">X.java</div>
+  <pre>@Service
+public class X 
+{
+  @Autowired
+  private Repository a;
+
+  @Transactional
+  public void fun1(int salary) 
+  {
+    if (salary &lt; 0) 
+    {
+      throw new RuntimeException("Salary cannot be negative!");
+    }
+  }
+}</pre>
+
+  <div class="code-label">A.java</div>
+  <pre>@RestController
+@RequestMapping("/request")
+public class A 
+{
+  @Autowired
+  private X a;
+
+  @PostMapping("/post")
+  public String post(@RequestParam int salary)
+  {
+    a.fun1(salary);
+    return "APIM";
+  }
+}</pre>
+
+  <div class="code-label">B.java</div>
+  <pre>@Aspect 
+@Component 
+public class B {
+  @AfterThrowing(...) 
+  public void fun2(Exception e)
+  {
+    System.out.println(e.getMessage());
+  }
+}</pre>
+
+  <div class="code-label">Main.java</div>
+  <pre>@SpringBootApplication
+public class Main 
+{
+  public static void main(String[] args) 
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+
+  <ul>
+            <li><strong>output:</strong></li>
+            <div class="output"><strong>APIM</strong></div>
+            <div class="output"><strong>if salary = -100: Salary cannot be negative!</strong></div>
+  </ul>
+</div>
+
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>1) Spring Boot Auto-Configuration and Spring Data JPA Application</strong></h2>
+        <ul>
+            <img src="AutoConfigurationSpring.jpg"/>
+            <li>Auto-Configuration plays a major role in Spring Data JPA</li>
+            <ol class="i">
+                <li><strong>DataSource</strong>:
+                    <ul>
+                        <li>After Database dependency detection, Spring Boot automatically configures the DataSource</li>
+                    </ul>
+                </li>
+                <li><strong>Hibernate</strong>:
+                    <ul>
+                        <li>After the DataSource is Ready, Spring Boot automatically configures Hibernate as the JPA</li>
+                    </ul>
+                </li>
+                <li><strong>JPA Repository</strong>:
+                    <ul>
+                        <li>After JPA detection, Spring Boot automatically configures the JpaRepository</li>
+                        <li>It enables the <strong>@EnableJpaRepositories</strong></li>
+                    </ul>
+                </li>
+                <li><strong>EntityManagerFactory</strong>:
+                    <ul>
+                        <li>Spring Boot automatically configures the EntityManagerFactory</li>
+                        <li>It automatically scans the <strong>@Entity</strong> class</li>
+                    </ul>
+                </li>
+                <li><strong>Transaction</strong>:
+                    <ul>
+                        <li>Spring Boot automatically configures the PlatformTransactionManager</li>
+                        <li>It automatically scans the <strong>@Transactional</strong></li>
+                    </ul>
+                </li>
+            </ol>
+            <li><strong>Example:</strong></li>
+            <div class="code-label">i) <strong>Dependencies</strong></div>
+            <pre>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    ...
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    ...
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    ...
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;</pre>
+            <div class="code-label">ii) <strong>Entity</strong></div>
+            <pre>@Entity
+public class Employee {
+  @Id
+  @GeneratedValue
+  ...
+}</pre>
+            <div class="code-label">iii) <strong>JPA Repository</strong></div>
+            <pre>public interface A extends JpaRepository {
+  ...
+}</pre>
+            <div class="code-label">iv) <strong>Spring Boot Application</strong></div>
+            <pre>@SpringBootApplication
+public class Main {
+  public static void main(String[] args) {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>2) Limitations of JDBC API</strong></h2>
+        <ol class="i">
+            <li><strong>Boilerplate Code</strong>:
+                <ul>
+                    <li>JDBC involves a lot of repetitive code</li>
+                    <li>This makes DAO code long, hard to read and more likely to have bugs</li>
+                </ul>
+            </li>
+            <li><strong>Complex Mapping</strong>:
+                <ul>
+                    <li>While using JDBC, you have to manually take the data from the databases and connect each row into java objects</li>
+                    <li>It is simple for smaller models but for complex models this process becomes time consuming</li>
+                </ul>
+            </li>
+            <li><strong>Manual SQL</strong>:
+                <ul>
+                    <li>In JDBC, developers manually write the SQL Query in their code</li>
+                    <li>If queries are not written in a proper way then it can lead to security vulnerabilites</li>
+                    <li>One of the major risk is "<strong>SQL Injection</strong>"</li>
+                    <li><strong>SQL Injection</strong>:
+                        <ul>
+                            <li>Attackers inserts malicious SQL Query in a code</li>
+                            <li>Example:
+                                <pre>SELECT * FROM users WHERE name = ... + userInput + ...</pre>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Lack of ORM</strong>:
+                <ul>
+                    <li><strong>ORM</strong> stands for Object-Relational Mapping</li>
+                    <li>JDBC is a low-level API and has not built-in Object Relational Mapping</li>
+                    <li>Developers manually extract the values from the <strong>ResultSet</strong></li>
+                    <li>They map those values to the Java objects</li>
+                </ul>
+            </li>
+        </ol>
+            <li><strong>Note:</strong>
+                <ul>
+                    <li>In previous year question they asked:</li>
+                    <li>"Explain the issues related to <strong>SQL injection</strong> and data mapping when using the <strong>JDBC API</strong>."</li>
+                    <li>"How does the <strong>JDBC API</strong> make it complex to handle transactions and connection management?"</li>
+                </ul>
+            </li>
+    </div>
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>3) Transaction Management</strong></h2>
+        <ul>
+            <li>It groups multiple operations into a single logical unit</li>
+            <li><strong>Transaction</strong> provides <strong>ACID Property</strong></li>
+            <li><strong>A</strong>- <strong>Atomicity</strong>
+                <ul>
+                    <li>All operations are executed, or none of them are executed</li>
+                </ul>
+            </li>
+            <li><strong>C</strong>- <strong>Consistency</strong>
+                <ul>
+                    <li>It keeps the data same before and after the transaction</li>
+                </ul>
+            </li>
+            <li><strong>I</strong>- <strong>Isolation</strong>
+                <ul>
+                    <li>Operations are executed individually</li>
+                </ul>
+            </li>
+            <li><strong>D</strong>- <strong>Durability</strong>
+                <ul>
+                    <li>When you commit the transaction, the data is stored permanently</li>
+                </ul>
+            </li>
+
+            <li><strong>Program:</strong></li>
+            <div class="code-label">Entity.java</div>
+            <pre>@Entity
+@Table(name = "Table")
+public class Entity 
+{
+  @Id
+  @GeneratedValue
+  public int salary;
+}</pre>
+
+            <div class="code-label">Repository.java</div>
+            <pre>public interface Repository extends JpaRepository 
+{
+  @Modifying
+  @Transactional
+  @Query(value="Select * from Table", nativeQuery = true)  
+}</pre>
+
+            <div class="code-label">X.java</div>
+            <pre>@Service
+public class X 
+{
+  @Autowired
+  private Repository a;
+
+  @Transactional
+  public void fun1(salary) 
+  {
+    if (salary &lt; 0) 
+    {
+      throw new RuntimeException("Salary cannot be negative!");
+    }
+  }
+}</pre>
+
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A 
+{
+  @Autowired
+  private X a;
+
+  @PostMapping("/post")
+  public String post(@RequestParam int salary)
+  {
+    a.fun1(salary);
+    return "APIM";
+  }
+}</pre>
+
+            <div class="code-label">B.java</div>
+            <pre>@Aspect 
+@Component 
+public class B {
+  @AfterThrowing(...) 
+  public void fun2(Exception e)
+  {
+    System.out.printlin(e.getMessage());
+  }
+}</pre>
+
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main 
+{
+  public static void main(String[] args) 
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+
+            <li><strong>output:</strong></li>
+            <div class="output"><strong>APIM</strong></div>
+            <div class="output"><strong>if salary = -100: Salary cannot be negative!</strong></div>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>4) Update Operation</strong></h2>
+        <ul>
+            <li><strong>The Update Operation</strong> in Spring Data JPA modifies an existing record in the database.</li>
+            <li>There are two ways to perform update operations:</li>
+            <li>a) <strong>save() Method</strong>
+                <ul>
+                    <li>The <strong>save()</strong> method is used to update an existing record in the database.</li>
+                    <li>When you call the <strong>save()</strong> method, JPA automatically performs an update instead of an insert.</li>
+                    <li>In <strong>JpaRepository</strong>, the <strong>save()</strong> method is used for both inserting and updating records.</li>
+                    <li>syntax:
+                        <pre>A.save(a);</pre>
+                    </li>
+                </ul>
+            </li>
+            <li>b) <strong>@Modifying</strong> and <strong>@Query</strong>
+                <ul>
+                    <li>The <strong>@Query</strong> annotation is used to update a specific record instead of the whole record.</li>
+                    <li>The <strong>@Modifying</strong> annotation is used to update the records instead of reading them.</li>
+                    <li>The <strong>@Transactional</strong> annotation is used to run the queries safely inside a transaction.</li>
+                    <li>We use <strong>JPQL (Java Persistence Query Language)</strong> to execute these queries.</li>
+                    <li>syntax:
+<pre>@Modifying
+@Transactional
+@Query("statement")</pre>
+                    </li>
+                </ul>
+            </li>
+
+            <li><strong>Program:</strong></li>
+            <div class="code-label">Entity.java</div>
+            <pre>@Entity
+@Table(name = "Table")
+public class Entity 
+{
+  @Id
+  @GeneratedValue
+  public int salary;
+}</pre>
+
+            <div class="code-label">Repository.java</div>
+            <pre>public interface Repository extends JpaRepository 
+{
+  @Modifying
+  @Transactional
+  @Query(value="Select * from Table", nativeQuery = true)  
+}</pre>
+
+            <div class="code-label">X.java</div>
+            <pre>@Service
+public class X 
+{
+  @Autowired
+  private Repository a;
+
+  @Transactional
+  public void fun1(salary) 
+  {
+    if (salary &lt; 0) 
+    {
+      throw new RuntimeException("Salary cannot be negative!");
+    }
+  }
+}</pre>
+
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A 
+{
+  @Autowired
+  private X a;
+
+  @PostMapping("/post")
+  public String post(@RequestParam int salary)
+  {
+    a.fun1(salary);
+    return "APIM";
+  }
+}</pre>
+
+            <div class="code-label">B.java</div>
+            <pre>@Aspect 
+@Component 
+public class B {
+  @AfterThrowing(...) 
+  public void fun2(Exception e)
+  {
+    System.out.printlin(e.getMessage());
+  }
+}</pre>
+
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main 
+{
+  public static void main(String[] args) 
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+
+            <li><strong>output:</strong></li>
+            <div class="output"><strong>APIM</strong></div>
+            <div class="output"><strong>if salary = -100: Salary cannot be negative!</strong></div>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>5) Custom Repository Implementation</strong></h2>
+        <ul>
+            <li>If built-in repositories aren’t enough for your Application, you can create a <strong>custom repository</strong> to handle your specific needs.</li>
+            <li><strong>Custom repository</strong> adds extra features to your Applications.</li>
+            <li><strong>Steps to Create a Custom Repository:</strong></li>
+            <li>a) <strong>Create Interface</strong>:
+                <pre>public interface A 
+{
+  void function();
+}</pre>
+            </li>
+            <li>b) <strong>Implement Interface</strong>:
+                <pre>public class B implements A 
+{
+  private EntityManager a;
+  @Override
+  ...
+}</pre>
+            </li>
+            <li>c) <strong>Extends with JpaRepository</strong>:
+                <pre>public interface A extends JpaRepository 
+{
+  ...
+}</pre>
+            </li>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>6) native SQL query</strong></h2>
+        <ul>
+            <li>Spring Data JPA allows you to execute the <strong>native SQL Query</strong> by using <strong>@Query</strong> annotation</li>
+            <li><strong>Syntax:</strong>
+                <pre>@Query(value="query", nativeQuery = true)</pre>
+            </li>
+            <li><strong>Note:</strong>
+                <ul>
+                    <li><strong>nativeQuery</strong> is always set to true</li>
+                </ul>
+            </li>
+
+            <div class="code-label">Program</div>
+            <pre>@Entity
+@Table(name = "Table")
+public class Entity 
+{
+  @Id
+  @GeneratedValue
+  public int salary;
+}</pre>
+
+            <div class="code-label">Repository.java</div>
+            <pre>public interface Repository extends JpaRepository 
+{
+  @Modifying
+  @Transactional
+  @Query(value="Select * from Table", nativeQuery = true)  
+}</pre>
+
+            <div class="code-label">X.java</div>
+            <pre>@Service
+public class X 
+{
+  @Autowired
+  private Repository a;
+
+  @Transactional
+  public void fun1(salary) 
+  {
+    if (salary &lt; 0) 
+    {
+      throw new RuntimeException("Salary cannot be negative!");
+    }
+  }
+}</pre>
+
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A 
+{
+  @Autowired
+  private X a;
+
+  @PostMapping("/post")
+  public String post(@RequestParam int salary)
+  {
+    a.fun1(salary);
+    return "APIM";
+  }
+}</pre>
+
+            <div class="code-label">B.java</div>
+            <pre>@Aspect 
+@Component 
+public class B {
+  @AfterThrowing(...) 
+  public void fun2(Exception e)
+  {
+    System.out.printlin(e.getMessage());
+  }
+}</pre>
+
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main 
+{
+  public static void main(String[] args) 
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+
+            <li><strong>output:</strong>
+                <ul>
+                    <li><strong>APIM</strong></li>
+                    <li><strong>if salary = -100: Salary cannot be negative!</strong></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>7) Sorted</strong></h2>
+        <ul>
+            <li><strong>A.java</strong></li>
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A 
+{
+  @Autowired
+  private X a;
+
+  @PostMapping("/post")
+  public String post(@RequestParam String b)
+  {
+    return a.fun1(Sort.by(Sort.Direction.ASC, b));
+  }
+}</pre>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>8) Best Practices for Optimizing Database Queries and Improving Performance in Spring Data JPA</strong></h2>
+        <ol class="i">
+            <li><strong>Pagination and sorting</strong>:
+                <ul>
+                    <li>Instead of fetching all records, use pageable and sort</li>
+                    <li><strong>Pageable</strong> is for paging</li>
+                    <li><strong>Sort</strong> is for ordering</li>
+                    <li>It reduces memory usage</li>
+                </ul>
+            </li>
+            <li><strong>Query Methods</strong>:
+                <ul>
+                    <li>Spring Data JPA automatically generates the queries</li>
+                    <li>Instead of writing manual queries, use these query methods</li>
+                    <li>It improves performance</li>
+                </ul>
+            </li>
+            <li><strong>@Query</strong>:
+                <ul>
+                    <li>Use this <strong>@Query</strong> annotation when needed</li>
+                    <li>Don't use it for unnecessary queries</li>
+                </ul>
+            </li>
+            <li><strong>Indexing</strong>:
+                <ul>
+                    <li>Adding database indexes improves searching and sorting speed</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <header><strong>API&M Unit-03</strong></header>
+    <div class="container">
+        <h2><strong>9) Best Practices for Structuring a Spring Data JPA Project</strong></h2>
+        <ol class="i">
+            <li><strong>Package Structure</strong>:
+                <ul>
+                    <li>Clean Package structure improves clarity and maintainability</li>
+                    <img src="WhatsApp Image 2025-11-20 at 23.54.29_94e39a70.jpg"/>
+                </ul>
+            </li>
+            <li><strong>Naming Conventions</strong>:
+                <ul>
+                    <li>a) <strong>Entity</strong>:
+                        <ul>
+                            <li>It represents a class</li>
+                        </ul>
+                    </li>
+                    <li>b) <strong>Repository</strong>:
+                        <ul>
+                            <li>Entity Name + Repository</li>
+                        </ul>
+                    </li>
+                    <li>c) <strong>Services</strong>:
+                        <ul>
+                            <li>Entity Name + Services</li>
+                        </ul>
+                    </li>
+                    <li>d) <strong>Controller</strong>:
+                        <ul>
+                            <li>Entity Name + Controller</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Interface</strong>:
+                <pre>public interface A extends JpaRepository 
+{
+  ...
+}</pre>
+            </li>
+            <li><strong>Modularity</strong>:
+                <ul>
+                    <li>If the project is large, group modules</li>
+                    <li>It increases Modularity</li>
+                    <img src="WhatsApp Image 2025-11-20 at 23.54.46_c7de832e.jpg"/>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div id="lightbox">
+        <img id="lightbox-img" src="" alt="Enlarged view">
+    </div>
+
+    <div id="image-tip">Click image to enlarge</div>
+
+    <script>
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImg = document.getElementById("lightbox-img");
+
+        document.querySelectorAll("img").forEach(img => {
+            img.addEventListener("click", () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add("active");
+            });
+        });
+
+        lightbox.addEventListener("click", () => {
+            lightbox.classList.remove("active");
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const tip = document.getElementById("image-tip");
+            if (tip) {
+                tip.classList.add("show");
+                setTimeout(() => tip.classList.remove("show"), 5000);
+            }
+        });
+    </script>
+
+</body>
+</html>
